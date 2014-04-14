@@ -7,24 +7,28 @@ log_metrics.api
 This module implements the log-metrics API.
 """
 
-from .core import LogMetrics
+from .core import MetricsLogger, GroupMetricsLogger
 
 
-def timer(name):
-    return LogMetrics().timer(name)
+def timer(name, **kwargs):
+    return MetricsLogger(**kwargs).timer(name)
 
 
-def increment(name, val=None):
-    return LogMetrics().increment(name, val)
+def increment(name, val=None, **kwargs):
+    return MetricsLogger(**kwargs).increment(name, val)
 
 
-def sample(name, val):
-    return LogMetrics().sample(name, val)
+def sample(name, val, **kwargs):
+    return MetricsLogger(**kwargs).sample(name, val)
 
 
-def measure(name, val):
-    return LogMetrics().measure(name, val)
+def measure(name, val, **kwargs):
+    return MetricsLogger(**kwargs).measure(name, val)
 
 
-def unique(name, val):
-    return LogMetrics().unique(name, val)
+def unique(name, val, **kwargs):
+    return MetricsLogger(**kwargs).unique(name, val)
+
+
+def group(**kwargs):
+    return GroupMetricsLogger(**kwargs)

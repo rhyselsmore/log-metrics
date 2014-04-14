@@ -10,6 +10,6 @@ __copyright__ = 'Copyright 2014 Rhys Elsmore'
 
 # Module Namespace
 
-from .core import LogMetrics
-from .api import timer, increment, sample, measure, unique
+from .core import MetricsLogger, GroupMetricsLogger
+from .api import timer, increment, sample, measure, unique, group
 

@@ -61,12 +61,11 @@ class Timer(ContextDecorator):
         self.metrics.measure("%s.ms" % self.name, duration)
 
 
-class LogMetrics(object):
+class Logger(object):
 
-    def __init__(self, source=None, prefix=None):
+    def __init__(self, source=None, prefix=None, **kwargs):
         self.source = source or os.environ.get('LOG_METRICS_SOURCE')
         self.prefix = prefix or os.environ.get('LOG_METRICS_PREFIX')
-        self._handler = self._log
 
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
@@ -74,30 +73,6 @@ class LogMetrics(object):
             handler = logging.StreamHandler(sys.stdout)
             handler.setFormatter(logging.Formatter('%(message)s'))
             self.logger.addHandler(handler)
-
-    def __enter__(self):
-        self._handler = self._store
-        self._metrics = []
-        return self
-
-    def __exit__(self, *exc):
-        self._log(' '.join(self._metrics))
-        self._handler = self._log
-
-    def _log(self, val):
-        if self.source:
-            val = "source=%s %s" % (self.source, val)
-        self.logger.info(val)
-
-    def _store(self, val):
-        self._metrics.append(val)
-
-    def _generate(self, prefix, name, value):
-        val = "%s#" % prefix
-        if self.prefix:
-            val = "%s%s." % (val, self.prefix)
-        val += "%s=%s" % (name, value)
-        return val
 
     def timer(self, name):
         return Timer(name, self)
@@ -114,3 +89,37 @@ class LogMetrics(object):
 
     def unique(self, name, val):
         self._handler(self._generate("unique", name, val))
+
+    def _generate(self, prefix, name, value):
+        val = "%s#" % prefix
+        if self.prefix:
+            val = "%s%s." % (val, self.prefix)
+        val += "%s=%s" % (name, value)
+        return val
+
+    def _log(self, val):
+        if self.source:
+            val = "source=%s %s" % (self.source, val)
+        self.logger.info(val)
+
+
+class GroupMetricsLogger(Logger):
+
+    def __enter__(self):
+        self._metrics = []
+        return self
+
+    def __exit__(self, *exe):
+        if self._metrics:
+            self._log(' '.join(self._metrics))
+
+    def _handler(self, val):
+        self._metrics.append(val)
+        print self._metrics
+
+
+class MetricsLogger(Logger):
+
+    def _handler(self, val):
+        self._log(val)
+
