@@ -50,7 +50,7 @@ class Timer(ContextDecorator):
 
     def after(self, *exc):
         duration = (time.time() - self.start)*1000
-        self.metrics.measure(self.name, "%sms" % duration, self.source)
+        self.metrics.measure(self.name, "%.2fms" % duration, self.source)
 
 
 class LogMetrics(object):
@@ -72,7 +72,7 @@ class LogMetrics(object):
     def timer(self, name, source=None):
         return Timer(name, source, self)
 
-    def count(self, name, val=None, source=None):
+    def increment(self, name, val=None, source=None):
         val = val or 1
         self._log(source, "count", name, val)
 
