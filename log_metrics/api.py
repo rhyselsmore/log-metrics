@@ -10,21 +10,21 @@ This module implements the log-metrics API.
 from .core import LogMetrics
 
 
-def timer(name, source=None):
-    return LogMetrics().timer(name, source)
+def timer(name):
+    return LogMetrics().timer(name)
 
 
-def increment(name, val=None, source=None):
-    return LogMetrics().increment(name, val, source)
+def increment(name, val=None):
+    return LogMetrics().increment(name, val)
 
 
-def sample(name, val, source=None):
-    return LogMetrics().sample(name, val, source)
+def sample(name, val):
+    return LogMetrics().sample(name, val)
 
 
-def measure(name, val, source=None):
-    return LogMetrics().measure(name, val, source)
+def measure(name, val):
+    return LogMetrics().measure(name, val)
 
 
-def unique(name, val, source=None):
-    return LogMetrics().unique(name, val, source)
+def unique(name, val):
+    return LogMetrics().unique(name, val)

@@ -12,6 +12,7 @@ import time
 import logging
 from functools import wraps
 import sys
+import os
 
 
 class ContextDecorator(object):
@@ -48,22 +49,25 @@ class ContextDecorator(object):
 
 
 class Timer(ContextDecorator):
-    def __init__(self, name, source, metrics):
+    def __init__(self, name, metrics):
         self.name = name
         self.metrics = metrics
-        self.source = source
 
     def before(self):
         self.start = time.time()
 
     def after(self, *exc):
         duration = "%.2f" % ((time.time() - self.start)*1000)
-        self.metrics.measure("%s.ms" % self.name, duration, self.source)
+        self.metrics.measure("%s.ms" % self.name, duration)
 
 
 class LogMetrics(object):
 
-    def __init__(self):
+    def __init__(self, source=None, prefix=None):
+        self.source = source or os.environ.get('LOG_METRICS_SOURCE')
+        self.prefix = prefix or os.environ.get('LOG_METRICS_PREFIX')
+        self._handler = self._log
+
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
         if not self.logger.handlers:
@@ -71,24 +75,42 @@ class LogMetrics(object):
             handler.setFormatter(logging.Formatter('%(message)s'))
             self.logger.addHandler(handler)
 
-    def _log(self, source, prefix, name, value):
-        val = "%s#%s=%s" % (prefix, name, value)
-        if source:
-            val = "source=%s %s" % (source, val)
+    def __enter__(self):
+        self._handler = self._store
+        self._metrics = []
+        return self
+
+    def __exit__(self, *exc):
+        self._log(' '.join(self._metrics))
+        self._handler = self._log
+
+    def _log(self, val):
+        if self.source:
+            val = "source=%s %s" % (self.source, val)
         self.logger.info(val)
 
-    def timer(self, name, source=None):
-        return Timer(name, source, self)
+    def _store(self, val):
+        self._metrics.append(val)
 
-    def increment(self, name, val=None, source=None):
+    def _generate(self, prefix, name, value):
+        val = "%s#" % prefix
+        if self.prefix:
+            val = "%s%s." % (val, self.prefix)
+        val += "%s=%s" % (name, value)
+        return val
+
+    def timer(self, name):
+        return Timer(name, self)
+
+    def increment(self, name, val=None):
         val = val or 1
-        self._log(source, "count", name, val)
+        self._handler(self._generate("count", name, val))
 
-    def sample(self, name, val, source=None):
-        self._log(source, "sample", name, val)
+    def sample(self, name, val):
+        self._handler(self._generate("sample", name, val))
 
-    def measure(self, name, val, source=None):
-        self._log(source, "measure", name, val)
+    def measure(self, name, val):
+        self._handler(self._generate("measure", name, val))
 
-    def unique(self, name, val, source=None):
-        self._log(source, "unique", name, val)
+    def unique(self, name, val):
+        self._handler(self._generate("unique", name, val))
