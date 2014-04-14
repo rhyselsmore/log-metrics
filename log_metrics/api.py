@@ -7,7 +7,7 @@ log_metrics.api
 This module implements the log-metrics API.
 """
 
-from .api import LogMetrics
+from .core import LogMetrics
 
 
 def timer(name, source=None):

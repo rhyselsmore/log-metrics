@@ -60,7 +60,7 @@ class Timer(ContextDecorator):
 
     def after(self, *exc):
         duration = (time.time() - self.start)*1000
-        self.metrics.measure(self.name, "%.2fms" % duration, self.source)
+        self.metrics.measure("%s.ms" % self.name, "%.2f" % duration, self.source)
 
 
 class LogMetrics(object):

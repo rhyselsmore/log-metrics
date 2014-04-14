@@ -20,18 +20,18 @@ packages = [
 
 requires = []
 
-"""
+
 with open('README.rst') as f:
     readme = f.read()
 with open('HISTORY.rst') as f:
     history = f.read()
-"""
+
 
 setup(
     name='log-metrics',
     version=log_metrics.__version__,
     description='Python Metric Logger.',
-    #long_description=readme + '\n\n' + history,
+    long_description=readme + '\n\n' + history,
     author=log_metrics.__author__,
     author_email=log_metrics.__email__,
     url='https://github.com/rhyselsmore/log-metrics',
