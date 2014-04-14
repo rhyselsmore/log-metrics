@@ -30,7 +30,13 @@ with open('HISTORY.rst') as f:
 setup(
     name='log-metrics',
     version=log_metrics.__version__,
+    description='Python Metric Logger.',
+    #long_description=readme + '\n\n' + history,
+    author=log_metrics.__author__,
+    author_email=log_metrics.__email__,
+    url='https://github.com/rhyselsmore/log-metrics',
     packages=packages,
+    package_data={'': ['LICENSE']},
     package_dir={'log_metrics': 'log_metrics'},
     include_package_data=True,
     install_requires=requires,
