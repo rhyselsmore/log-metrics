@@ -58,11 +58,10 @@ class LogMetrics(object):
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
-        handler = logging.StreamHandler()
-        handler.setFormatter(logging.Formatter('%(message)s'))
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.INFO)
-        self.logger.addHandler(handler)
+        if not self.logger.handlers:
+            handler = logging.StreamHandler(sys.stdout)
+            handler.setFormatter(logging.Formatter('%(message)s'))
+            self.logger.addHandler(handler)
 
     def _log(self, source, prefix, name, value):
         val = "%s#%s=%s" % (prefix, name, value)
