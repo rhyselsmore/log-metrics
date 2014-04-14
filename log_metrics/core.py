@@ -13,8 +13,6 @@ import logging
 from functools import wraps
 import sys
 
-EXC = (None, None, None)
-
 
 class ContextDecorator(object):
     before = None
@@ -25,7 +23,7 @@ class ContextDecorator(object):
         def inner(*args, **kw):
             if self.before is not None:
                 self.before()
-            exc = EXC
+            exc = (None, None, None)
             try:
                 result = f(*args, **kw)
             except Exception:
@@ -33,7 +31,7 @@ class ContextDecorator(object):
             catch = False
             if self.after is not None:
                 catch = self.after(*exc)
-            if not catch and exc is not EXC:
+            if not catch and exc is not (None, None, None):
                 _reraise(*exc)
             return result
         return inner
@@ -59,8 +57,8 @@ class Timer(ContextDecorator):
         self.start = time.time()
 
     def after(self, *exc):
-        duration = (time.time() - self.start)*1000
-        self.metrics.measure("%s.ms" % self.name, "%.2f" % duration, self.source)
+        duration = "%.2f" % ((time.time() - self.start)*1000)
+        self.metrics.measure("%s.ms" % self.name, duration, self.source)
 
 
 class LogMetrics(object):
