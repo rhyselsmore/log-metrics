@@ -84,3 +84,14 @@ Timers
     ...     time.sleep(0.5)
     >>> my_func()
     measure#my-timed-decorator.ms=504.20
+
+
+Metric Groups
+*************
+
+.. code-block:: pycon
+
+    >>> with log_metrics.group() as g:
+    ...     g.measure('my-measurement', 2)
+    ...     g.increment('my-counter')
+    measure#my-measurement=2 count#my-counter=1
