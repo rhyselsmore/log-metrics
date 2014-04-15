@@ -95,3 +95,11 @@ Metric Groups
     ...     g.measure('my-measurement', 2)
     ...     g.increment('my-counter')
     measure#my-measurement=2 count#my-counter=1
+
+.. code-block:: pycon
+
+    >>> g = log_metrics.group():
+    >>> g.measure('my-measurement', 2)
+    >>> g.increment('my-counter')
+    >>> g.emit()
+    measure#my-measurement=2 count#my-counter=1
