@@ -105,21 +105,29 @@ class Logger(object):
 
 class GroupMetricsLogger(Logger):
 
+    def __init__(self, *args, **kwargs):
+        super(GroupMetricsLogger, self).__init__(*args, **kwargs)
+        self.reset()
+
     def __enter__(self):
-        self._metrics = []
         return self
 
     def __exit__(self, *exe):
+        self.emit()
+
+    def emit(self):
         if self._metrics:
             self._log(' '.join(self._metrics))
+        self.reset()
+
+    def reset(self):
+        self._metrics = []
 
     def _handler(self, val):
         self._metrics.append(val)
-        print self._metrics
 
 
 class MetricsLogger(Logger):
 
     def _handler(self, val):
         self._log(val)
-
