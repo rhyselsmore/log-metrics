@@ -90,8 +90,8 @@ class Logger(object):
     def unique(self, name, val):
         self._handler(self._generate("unique", name, val))
 
-    def _generate(self, prefix, name, value):
-        val = "%s#" % prefix
+    def _generate(self, measurement_type, name, value):
+        val = "%s#" % measurement_type
         if self.prefix:
             val = "%s%s." % (val, self.prefix)
         val += "%s=%s" % (name, value)
