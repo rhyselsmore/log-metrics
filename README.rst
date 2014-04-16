@@ -2,8 +2,9 @@ log-metrics
 ===========
 
 log-metrics is a tiny metrics logger, based on the l2met format. Meant for use on
-Heroku, this package allows you to send custom metrics to [Librato](https://librato.com). You can find more
-information [here](https://devcenter.heroku.com/articles/librato#custom-log-based-metrics).
+Heroku, his allows you to send custom metrics to `Librato <http://librato.com>`_.
+
+You can find more information on these custom metrics `here <https://devcenter.heroku.com/articles/librato#custom-log-based-metrics>`_.
 
 
 Installation
