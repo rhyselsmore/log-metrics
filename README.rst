@@ -104,7 +104,7 @@ Metric Groups
 
 .. code-block:: pycon
 
-    >>> g = log_metrics.group():
+    >>> g = log_metrics.group()
     >>> g.measure('my-measurement', 2)
     >>> g.increment('my-counter')
     >>> g.emit()
