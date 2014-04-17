@@ -1,6 +1,12 @@
 History
 =======
 
+0.0.4 (2014-04-17)
+------------------
+
+* 'group' API now operational outside of a context manager.
+* Minor code changes.
+
 0.0.3 (2014-04-14)
 ------------------
 
