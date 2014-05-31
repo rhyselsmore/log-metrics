@@ -80,16 +80,20 @@ class Logger(object):
     def increment(self, name, val=None):
         val = val or 1
         self._handler(self._generate("count", name, val))
+        return self
 
     def sample(self, name, val):
         self._handler(self._generate("sample", name, val))
+        return self
 
     def measure(self, name, val):
         self._handler(self._generate("measure", name, val))
+        return self
 
     def unique(self, name, val):
         self._handler(self._generate("unique", name, val))
-
+        return self
+        
     def _generate(self, measurement_type, name, value):
         val = "%s#" % measurement_type
         if self.prefix:
