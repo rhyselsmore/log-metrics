@@ -1,8 +1,8 @@
 log-metrics
 ===========
 
-log-metrics is a tiny metrics logger, based on the l2met format. Meant for use on
-Heroku, his allows you to send custom metrics to `Librato <http://librato.com>`_.
+log-metrics is a tiny metrics logger, based on the [l2met](https://github.com/ryandotsmith/l2met) format. Meant for use on
+Heroku, this allows you to send custom metrics to `Librato <http://librato.com>`_.
 
 You can find more information on these custom metrics `here <https://devcenter.heroku.com/articles/librato#custom-log-based-metrics>`_.
 
@@ -133,4 +133,3 @@ These arguments are also supported for group functions:
     >>> g.increment('my-measurement')
     >>> g.emit()
     source=my-metric-source count#my-prefix.my-amount=1 count#my-prefix.my-amount1=1 count#my-prefix.my-amount2=1
-
